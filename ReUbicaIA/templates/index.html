@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ReUbica IA</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="app">
+
+    <aside class="lateral">
+      <div class="marca">
+        <span class="marca-nombre">ReUbica IA</span>
+        <span class="marca-lema">La tecnología transforma las tareas, las personas evolucionan con ellas.</span>
+      </div>
+      <nav class="menu" aria-label="Secciones">
+        <a href="#inicio" data-vista="inicio">Inicio</a>
+        <a href="#empleados" data-vista="empleados">Empleados</a>
+        <a href="#tareas" data-vista="tareas">Tareas</a>
+        <a href="#recomendaciones" data-vista="recomendaciones">Recomendaciones IA</a>
+      </nav>
+      <p class="nota-lateral">Prototipo académico con datos ficticios. Las recomendaciones son sugerencias: una persona debe revisarlas antes de cambiar funciones.</p>
+    </aside>
+
+    <main class="contenido">
+
+      <!-- INICIO -->
+      <section class="vista" id="vista-inicio" hidden>
+        <header class="encabezado">
+          <h1 tabindex="-1">Inicio</h1>
+          <p>Resumen del proyecto piloto: personas, actividades y reubicaciones.</p>
+        </header>
+
+        <div class="vacio" id="inicio-vacio" hidden>
+          <h2>Aún no hay datos</h2>
+          <p>Registra empleados en la sección Empleados, o carga un ejemplo con 20 trabajadores ficticios de una empresa de atención al cliente.</p>
+          <button type="button" class="boton" id="btn-demo">Cargar datos de ejemplo</button>
+        </div>
+
+        <div id="inicio-datos" hidden>
+          <div class="indicadores" id="indicadores"></div>
+          <div class="dos-col">
+            <article class="tarjeta">
+              <h2>Cómo cambian las actividades</h2>
+              <div id="grafico-tareas"></div>
+            </article>
+            <article class="tarjeta">
+              <h2>Metas del piloto</h2>
+              <div id="metas"></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- EMPLEADOS -->
+      <section class="vista" id="vista-empleados" hidden>
+        <header class="encabezado">
+          <h1 tabindex="-1">Empleados</h1>
+          <p>Registra a las personas, su experiencia y sus habilidades.</p>
+        </header>
+
+        <form id="form-empleado" class="tarjeta formulario" novalidate>
+          <h2 id="titulo-form-empleado">Registrar empleado</h2>
+          <input type="hidden" id="emp-id">
+          <div class="rejilla">
+            <div class="campo">
+              <label for="emp-nombre">Nombre</label>
+              <input id="emp-nombre" maxlength="120" placeholder="Ana Martínez" required>
+            </div>
+            <div class="campo">
+              <label for="emp-cargo">Cargo actual</label>
+              <input id="emp-cargo" maxlength="120" placeholder="Auxiliar de atención" required>
+            </div>
+            <div class="campo">
+              <label for="emp-experiencia">Experiencia</label>
+              <input id="emp-experiencia" maxlength="60" placeholder="2 años">
+            </div>
+            <div class="campo">
+              <label for="emp-estado">Estado laboral</label>
+              <select id="emp-estado"></select>
+            </div>
+            <div class="campo ancho">
+              <label for="emp-habilidades">Habilidades</label>
+              <input id="emp-habilidades" maxlength="600" placeholder="Comunicación, organización, servicio al cliente" required>
+              <small>Sepáralas con comas.</small>
+            </div>
+            <div class="campo ancho">
+              <label for="emp-intereses">Intereses</label>
+              <input id="emp-intereses" maxlength="300" placeholder="Atención especializada y seguimiento">
+            </div>
+          </div>
+          <p class="error-form" id="error-empleado" role="alert" hidden></p>
+          <div class="acciones">
+            <button type="submit" class="boton" id="btn-guardar-empleado">Guardar empleado</button>
+            <button type="button" class="boton secundario" id="btn-cancelar-empleado" hidden>Cancelar edición</button>
+          </div>
+        </form>
+
+        <article class="tarjeta">
+          <div class="cabecera-tabla">
+            <h2>Personal registrado</h2>
+            <div class="campo buscador">
+              <label for="buscar-empleado" class="solo-lectores">Buscar por nombre o cargo</label>
+              <input id="buscar-empleado" type="search" placeholder="Buscar por nombre o cargo">
+            </div>
+          </div>
+          <div class="tabla-envoltura">
+            <table>
+              <thead>
+                <tr><th>Nombre</th><th>Cargo actual</th><th>Experiencia</th><th>Habilidades</th><th>Estado</th><th><span class="solo-lectores">Acciones</span></th></tr>
+              </thead>
+              <tbody id="tabla-empleados"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <!-- TAREAS -->
+      <section class="vista" id="vista-tareas" hidden>
+        <header class="encabezado">
+          <h1 tabindex="-1">Tareas</h1>
+          <p>Clasifica las actividades de la empresa según cuánto cambian con la tecnología.</p>
+        </header>
+
+        <form id="form-tarea" class="tarjeta formulario" novalidate>
+          <h2 id="titulo-form-tarea">Registrar actividad</h2>
+          <input type="hidden" id="tar-id">
+          <div class="rejilla">
+            <div class="campo">
+              <label for="tar-nombre">Nombre de la actividad</label>
+              <input id="tar-nombre" maxlength="160" placeholder="Clasificación inicial de solicitudes" required>
+            </div>
+            <div class="campo">
+              <label for="tar-clasificacion">Clasificación</label>
+              <select id="tar-clasificacion">
+                <option value="automatizable">Automatizable: tarea repetitiva</option>
+                <option value="asistida">Asistida por IA: tarea complementada</option>
+                <option value="humana">Humana: requiere personas</option>
+              </select>
+            </div>
+            <div class="campo ancho">
+              <label for="tar-descripcion">Descripción</label>
+              <input id="tar-descripcion" maxlength="400" placeholder="Leer cada solicitud y asignarle una categoría">
+            </div>
+            <div class="campo">
+              <label for="tar-empleado">Realizada por</label>
+              <select id="tar-empleado"></select>
+            </div>
+          </div>
+          <p class="error-form" id="error-tarea" role="alert" hidden></p>
+          <div class="acciones">
+            <button type="submit" class="boton" id="btn-guardar-tarea">Guardar actividad</button>
+            <button type="button" class="boton secundario" id="btn-cancelar-tarea" hidden>Cancelar edición</button>
+          </div>
+        </form>
+
+        <article class="tarjeta">
+          <h2>Actividades de la empresa</h2>
+          <div class="tabla-envoltura">
+            <table>
+              <thead>
+                <tr><th>Actividad</th><th>Clasificación</th><th>Realizada por</th><th><span class="solo-lectores">Acciones</span></th></tr>
+              </thead>
+              <tbody id="tabla-tareas"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <!-- RECOMENDACIONES -->
+      <section class="vista" id="vista-recomendaciones" hidden>
+        <header class="encabezado">
+          <h1 tabindex="-1">Recomendaciones IA</h1>
+          <p>Compara las habilidades de una persona con los cargos disponibles y sugiere capacitaciones.</p>
+        </header>
+
+        <form id="form-analisis" class="tarjeta formulario">
+          <h2>Analizar un perfil</h2>
+          <div class="fila-analisis">
+            <div class="campo">
+              <label for="rec-empleado">Empleado</label>
+              <select id="rec-empleado"></select>
+            </div>
+            <button type="submit" class="boton" id="btn-analizar">Analizar perfil</button>
+          </div>
+          <p class="error-form" id="error-analisis" role="alert" hidden></p>
+        </form>
+
+        <div id="resultado-ia" hidden>
+          <div class="encabezado-resultado">
+            <h2 id="resultado-titulo"></h2>
+            <p class="aclaracion">El porcentaje mide la similitud entre los textos del perfil y del cargo. No es la probabilidad de que la persona tenga éxito en él.</p>
+          </div>
+          <div id="resultado-tarjetas"></div>
+        </div>
+
+        <article class="tarjeta">
+          <h2>Decisiones registradas</h2>
+          <div class="tabla-envoltura">
+            <table>
+              <thead>
+                <tr><th>Empleado</th><th>Cargo sugerido</th><th>Similitud</th><th>Revisión</th><th>Capacitación</th><th><span class="solo-lectores">Acciones</span></th></tr>
+              </thead>
+              <tbody id="tabla-recomendaciones"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="tarjeta">
+          <h2>Cargos disponibles en la empresa</h2>
+          <div id="catalogo-cargos" class="catalogo"></div>
+        </article>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="aviso" class="aviso" role="status" aria-live="polite" hidden></div>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
